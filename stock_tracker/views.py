@@ -11,7 +11,11 @@ import yfinance as yf
 import plotly.graph_objs as go
 
 
-def portfolio(request):
+def home_view(request):
+    return render(request, 'stocks/home.html', {})
+
+
+def stock_info(request):
     form = StockSearchForm()
     stock = None
     stock_name = None
@@ -47,14 +51,15 @@ def portfolio(request):
         'stock': stock,
     }
 
-    return render(request, 'portfolio/portfolio.html', context)
+    return render(request, 'stocks/stock_info.html', context)
 
 
-def plotly_page(request):
+def stock_history(request):
     form = StockSearchForm()
     trace = None
     layout = None
-    stock_history = []
+    timeline = None
+    historic_data = []
     graph_type = None
     graph_div = None
     ticker_form = None
@@ -65,30 +70,31 @@ def plotly_page(request):
         graph_type = request.GET.get('graph_type',
                                      'line')  # Get the graph type from the query parameter, set default to line
         ticker_form = request.GET.get('stock_ticker')
+        timeline = request.GET.get('timeline', '1y')
 
         if form.is_valid():
             ticker_form = form.cleaned_data['stock_ticker']
 
         fetched_stock = yf.Ticker(ticker_form)
-        history = fetched_stock.history('1y')
-        stock_history = history.reset_index().to_dict('records')  # Convert DataFrame to list of dictionaries
+        history = fetched_stock.history(timeline)
+        historic_data = history.reset_index().to_dict('records')  # Convert DataFrame to list of dictionaries
 
     if fetched_stock is not None:
 
         if graph_type == 'line':
-            dates = [record['Date'].strftime('%Y-%m-%d') for record in stock_history]
-            prices = [record['Close'] for record in stock_history]
+            dates = [record['Date'].strftime('%Y-%m-%d') for record in historic_data]
+            prices = [record['Close'] for record in historic_data]
 
             trace = go.Scatter(x=dates, y=prices, mode='lines+markers', name='Price')
             layout = go.Layout(title='Historical Price Chart', xaxis=dict(title='Date'), yaxis=dict(title='Price'))
 
         elif graph_type == 'candlestick':
             trace = go.Candlestick(
-                x=[record['Date'] for record in stock_history],
-                open=[record['Open'] for record in stock_history],
-                high=[record['High'] for record in stock_history],
-                low=[record['Low'] for record in stock_history],
-                close=[record['Close'] for record in stock_history],
+                x=[record['Date'] for record in historic_data],
+                open=[record['Open'] for record in historic_data],
+                high=[record['High'] for record in historic_data],
+                low=[record['Low'] for record in historic_data],
+                close=[record['Close'] for record in historic_data],
                 increasing_line_color='green',  # Customize colors if desired
                 decreasing_line_color='red'
             )
@@ -101,7 +107,8 @@ def plotly_page(request):
     context = {
         'form': form,
         'stock_ticker': ticker_form,
+        'graph_type': graph_type,
+        'timeline': timeline,
         'plot_div': graph_div,
-        'graph_type': graph_type
     }
-    return render(request, 'portfolio/graph.html', context)
+    return render(request, 'stocks/graph.html', context)

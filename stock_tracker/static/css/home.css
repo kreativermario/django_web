@@ -1,0 +1,31 @@
+.homepage-image {
+    background-image: url("../images/homepage-image.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    position: relative; /* Make sure the container is positioned */
+}
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity as needed */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Make the overlay transparent to clicks */
+}
+
+.content-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: white; /* Set the text color to white */
+}
+
+/* Additional style for links */
+.content-container a {
+    color: white;
+}
+

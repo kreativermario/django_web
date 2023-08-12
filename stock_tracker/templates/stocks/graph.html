@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block content %}
+    <div class="content mt-5 mx-5">
+        <h2 class="mx-5">Historical Price Chart</h2>
+        <form class="my-2 mx-5" method="post" class="form-inline" id="stock-search-form">
+            {% csrf_token %}
+            <div class="input-group mx-3 my-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="{{ form.stock_ticker.id_for_label }}">Stock Ticker</label>
+                </div>
+                <input type="text" name="{{ form.stock_ticker.name }}" placeholder="Enter stock ticker" class="form-control">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Button to switch graph type -->
+    <div class="col-12 mt-2 mx-5">
+        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type=line"
+           class="btn btn-primary">Line Graph</a>
+        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type=candlestick"
+           class="btn btn-primary">Candlestick Graph</a>
+    </div>
+
+    <div class="col-12 mt-4 mx-5">
+        <!-- Plotly graph -->
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Historical Price Chart</h4>
+            </div>
+            <div class="card-body">
+                <div id="plotly-graph">{{ plot_div|safe }}</div>
+            </div>
+            <div class="card-footer">
+                <div id="card-footer">{{ graph_type }} / {{ timeline }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Button to switch date -->
+    <div class="col-12 mt-2 mx-5">
+        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=1y"
+           class="btn btn-secondary">1y</a>
+        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=6mo"
+           class="btn btn-secondary">6mo</a>
+        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=3mo"
+           class="btn btn-secondary">3mo</a>
+        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=1mo"
+           class="btn btn-secondary">1mo</a>
+        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=14d"
+           class="btn btn-secondary">14d</a>
+        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=7d"
+           class="btn btn-secondary">7d</a>
+        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=3d"
+           class="btn btn-secondary">3d</a>
+    </div>
+{% endblock %}
