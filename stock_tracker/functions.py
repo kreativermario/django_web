@@ -42,8 +42,7 @@ def create_stock(stock_data, company=None):
 
     exchange = stock_data.get('exchange')
 
-    if company is None:
-        #TODO Raise custom exception
+    # TODO if company is None throw exception
 
     stock = Stock(name=stock_name,
                   symbol=stock_symbol,

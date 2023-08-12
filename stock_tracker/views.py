@@ -70,7 +70,7 @@ def plotly_page(request):
             ticker_form = form.cleaned_data['stock_ticker']
 
         fetched_stock = yf.Ticker(ticker_form)
-        history = fetched_stock.history('1mo')
+        history = fetched_stock.history('1y')
         stock_history = history.reset_index().to_dict('records')  # Convert DataFrame to list of dictionaries
 
     if fetched_stock is not None:
