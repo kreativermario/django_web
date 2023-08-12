@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="content">
+        <h2>Historical Price Chart</h2>
+        <form method="post" class="form-inline" id="stock-search-form">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                {{ form.stock_ticker.label_tag }}
+                {{ form.stock_ticker }}
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+
+        <!-- Button to switch graph type -->
+        <div class="col-12 mt-2">
+            <a href="{% url 'portfolio:plotly_page' %}?stock_ticker={{ stock_ticker }}&graph_type=line"
+               class="btn btn-primary">Line Graph</a>
+            <a href="{% url 'portfolio:plotly_page' %}?stock_ticker={{ stock_ticker }}&graph_type=candlestick"
+               class="btn btn-primary">Candlestick Graph</a>
+        </div>
+
+        <div class="col-12 mt-4">
+            <!-- Plotly graph -->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Historical Price Chart</h4>
+                </div>
+                <div class="card-body">
+                    <div id="plotly-graph">{{ plot_div|safe }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
