@@ -15,32 +15,42 @@
 <body>
 <header>
     {% block navbar %}
-        <ul class="nav nav-tabs" >
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'stocks:home' %}">Home</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Stocks</a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{% url 'stocks:stock_info' %}">Info</a></li>
-                    <li><a class="dropdown-item" href="{% url 'stocks:stock_history' %}">Graphs</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Separated link</a></li>
-                </ul>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-            </li>
-        </ul>
+        <nav class="navbar shadow-5-strong navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'stocks:home' %}">Portfolio Tracker</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url 'stocks:home' %}">Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Stocks
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" href="{% url 'stocks:stock_info' %}">Info</a></li>
+                                <li><a class="dropdown-item" href="{% url 'stocks:stock_history' %}">Graph</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Pricing</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
     {% endblock %}
 
 </header>
 <main>
     {% block content %}{% endblock %}
+    {% block alerts %}{% endblock %}
 </main>
 <footer>
     <!-- Footer content -->

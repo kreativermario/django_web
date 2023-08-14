@@ -2,14 +2,18 @@
 {% load static %}
 
 {% block content %}
-    <div class="content">
+    <div class="content mx-5 px-5 mt-5 animate__animated animate__fadeIn">
         <h2>Stock Information</h2>
-        <form method="post" class="form-inline" id="stock-search-form">
+        <form class="my-5" method="post" class="form-inline" id="stock-search-form">
             {% csrf_token %}
-            <div class="input-group mb-3">
-                {{ form.stock_ticker.label_tag }}
-                {{ form.stock_ticker }}
-                <button type="submit" class="btn btn-primary">Search</button>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="{{ form.stock_ticker.id_for_label }}">Stock Ticker</label>
+                </div>
+                <input type="text" name="{{ form.stock_ticker.name }}" placeholder="Enter stock ticker" class="form-control">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
             </div>
         </form>
 
@@ -17,94 +21,78 @@
         {% if stock.name %}
             <div class="stock-info">
                 <h3>{{ stock.name }}</h3>
-                <div class="row">
-                    <div class="col-4">
-                        <!-- List group -->
-                        <div class="list-group" id="list-tab" role="tablist">
-                            <a class="list-group-item list-group-item-action active" id="stock-summary-tab"
-                               data-bs-toggle="list" href="#stock-summary" role="tab" aria-controls="stock-summary">Summary</a>
-                            <a class="list-group-item list-group-item-action" id="company-profile-tab"
-                               data-bs-toggle="list" href="#company-profile" role="tab" aria-controls="company-profile">Profile</a>
-                        </div>
+                <div class="d-flex align-items-start mt-5">
+                    <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <button class="nav-link active" id="stock-info-tab" data-bs-toggle="pill" data-bs-target="#stock-info" type="button" role="tab" aria-controls="stock-info" aria-selected="true">Home</button>
+                        <button class="nav-link" id="company-info-tab" data-bs-toggle="pill" data-bs-target="#company-info" type="button" role="tab" aria-controls="company-info" aria-selected="false">Profile</button>
                     </div>
-                    <div class="col-8">
-                        <div class="tab-content" id="nav-tabContent">
-                            <!-- Stock summary tab info -->
-                            <div class="tab-pane fade show active" id="stock-summary" role="tabpanel"
-                                 aria-labelledby="stock-summary-tab">
-                                <div class="card card-body">
-                                    <div class="col-md-4">
-                                        <p class="fw-bold">Symbol:</p>
-                                        <p class="text-muted">{{ stock.symbol }}</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p class="fw-bold">Overall Risk:</p>
-                                        <p class="text-muted">{{ stock.overall_risk }}%</p>
-                                    </div>
-                                     <div class="col-md-4">
-                                        <p class="fw-bold">Previous close:</p>
-                                        <p class="text-muted">{{ stock.previous_close_price }}{{ stock.currency}}</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p class="fw-bold">Open:</p>
-                                        <p class="text-muted">{{ stock.open_price }}{{ stock.currency}}</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p class="fw-bold">Price:</p>
-                                        <p class="text-muted">{{ stock.price }}{{ stock.currency}}</p>
-                                    </div>
-                                     <div class="col-md-4">
-                                        <p class="fw-bold">Bid:</p>
-                                        <p class="text-muted">{{ stock.bid_price }}{{ stock.currency}}</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p class="fw-bold">Ask:</p>
-                                        <p class="text-muted">{{ stock.ask_price }}{{ stock.currency}}</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p class="fw-bold">Exchange Market:</p>
-                                        <p class="text-muted">{{ stock.exchange }}</p>
-                                    </div>
+                    <div class="tab-content" id="v-pills-tabContent">
+                        <div class="tab-pane fade show active" id="stock-info" role="tabpanel" aria-labelledby="stock-info-tab">
+                            <div class="animate__fadeIn mb-5 mt-2">
+                                <div class="card" style="width: 100rem;">
+                                <div class="card-body">
+                                    <p class="fw-bold">Symbol:</p>
+                                    <p class="text-muted">{{ stock.symbol }}</p>
+
+                                    <p class="fw-bold">Overall Risk:</p>
+                                    <p class="text-muted">{{ stock.overall_risk }}%</p>
+
+
+                                    <p class="fw-bold">Previous close:</p>
+                                    <p class="text-muted">{{ stock.previous_close_price }}{{ stock.currency}}</p>
+
+
+                                    <p class="fw-bold">Open:</p>
+                                    <p class="text-muted">{{ stock.open_price }}{{ stock.currency}}</p>
+
+                                    <p class="fw-bold">Price:</p>
+                                    <p class="text-muted">{{ stock.price }}{{ stock.currency}}</p>
+
+                                    <p class="fw-bold">Bid:</p>
+                                    <p class="text-muted">{{ stock.bid_price }}{{ stock.currency}}</p>
+
+                                    <p class="fw-bold">Ask:</p>
+                                    <p class="text-muted">{{ stock.ask_price }}{{ stock.currency}}</p>
+
+                                    <p class="fw-bold">Exchange Market:</p>
+                                    <p class="text-muted">{{ stock.exchange }}</p>
                                 </div>
                             </div>
-                            <!-- Company tab info -->
-                            <div class="tab-pane fade" id="company-profile" role="tabpanel"
-                                 aria-labelledby="company-profile-tab">
-                                <div class="card card-body">
-                                    <div class="col-md-4">
-                                        <p class="fw-bold">Country:</p>
-                                        <p class="text-muted">{{ stock.company.country }}</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p class="fw-bold">Address:</p>
-                                        <p class="text-muted">{{ stock.company.address }}</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p class="fw-bold">City:</p>
-                                        <p class="text-muted">{{ stock.company.city }}</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p class="fw-bold">State:</p>
-                                        <p class="text-muted">{{ stock.company.state }}</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p class="fw-bold">Website:</p>
-                                        <p><a class="link-opacity-75-hover" href="{{ stock.company.website }}"
-                                              target="_blank">{{ stock.company.website }}</a></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p class="fw-bold">Industry:</p>
-                                        <p class="text-muted">{{ stock.company.industry }}</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p class="fw-bold">Sector:</p>
-                                        <p class="text-muted">{{ stock.company.sector }}</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p class="fw-bold">Business Summary:</p>
-                                        <p class="text-muted">{{ stock.company.business_summary }}</p>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="company-info" role="tabpanel" aria-labelledby="company-info-tab">
+                            <div class="animate__fadeIn mb-5 mt-2">
+                                <div class="card">
+                                <div class="card-body">
+
+                                    <p class="fw-bold">Country:</p>
+                                    <p class="text-muted">{{ stock.company.country }}</p>
+
+                                    <p class="fw-bold">Address:</p>
+                                    <p class="text-muted">{{ stock.company.address }}</p>
+
+                                    <p class="fw-bold">City:</p>
+                                    <p class="text-muted">{{ stock.company.city }}</p>
+
+                                    <p class="fw-bold">State:</p>
+                                    <p class="text-muted">{{ stock.company.state }}</p>
+
+                                    <p class="fw-bold">Website:</p>
+                                    <p><a class="link-opacity-75-hover" href="{{ stock.company.website }}"
+                                          target="_blank">{{ stock.company.website }}</a></p>
+
+                                    <p class="fw-bold">Industry:</p>
+                                    <p class="text-muted">{{ stock.company.industry }}</p>
+
+                                    <p class="fw-bold">Sector:</p>
+                                    <p class="text-muted">{{ stock.company.sector }}</p>
+
+                                    <p class="fw-bold">Business Summary:</p>
+                                    <p class="text-muted">{{ stock.company.business_summary }}</p>
+
+
                                 </div>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -113,16 +101,38 @@
         {% endif %}
     </div>
 {% endblock %}
+{% block alerts %}
+    {% if form_error %}
+        <div id="errorModal" class="modal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Modal body text goes here.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    {% endif %}
+{% endblock %}
 
 {% block javascript %}
-    {{ block.super }}
     <script>
-        // Implements animations for the navigation bars
+        // Modal handling
         $(document).ready(function() {
-            $(".list-group-item").live('click', function(){
-                $('.active').removeClass('active');
-                $(this).addClass('active');
-            });
+            {% if form_error %}
+                $("#errorModal").modal("show");
+            {% endif %}
         });
     </script>
 {% endblock %}
+

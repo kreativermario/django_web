@@ -5,46 +5,6 @@
     <link href="{% static 'css/home.css' %}" rel="stylesheet" type="text/css">
 {% endblock %}
 
-{% block navbar %}
-   <!-- Navbar -->
-<nav class="navbar shadow-5-strong">
-  <!-- Container wrapper -->
-  <div class="container-fluid">
-    <!-- Navbar brand -->
-    <a class="navbar-brand" href="#">Brand</a>
-
-    <!-- Toggle button -->
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-mdb-toggle="collapse"
-      data-mdb-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <i class="fas fa-bars"></i>
-    </button>
-
-    <!-- Collapsible wrapper -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <!-- Left links -->
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{% url 'stocks:home' %}">Home</a>
-        </li>
-        <!-- ... (rest of your navigation links) ... -->
-      </ul>
-
-      <!-- Left links -->
-    </div>
-    <!-- Collapsible wrapper -->
-  </div>
-  <!-- Container wrapper -->
-</nav>
-<!-- Navbar -->
-{% endblock %}
-
 
 {% block content %}
     <div class="homepage-image">
@@ -54,8 +14,10 @@
                 <div class="col-md-6">
                     <h1 class="display-4 animate__animated animate__zoomIn">Welcome to Portfolio Tracker</h1>
                     <p class="lead animate__animated animate__fadeInUp">Keep track of your stock portfolio and analyze historical price data.</p>
-                    <a href="{% url 'stocks:stock_info' %}" class="btn btn-primary btn-lg mr-2 animate__animated animate__fadeIn">Explore Stocks</a>
-                    <a href="{% url 'stocks:stock_history' %}" class="btn btn-secondary btn-lg animate__animated animate__fadeIn">View Historical Graphs</a>
+                    <a href="{% url 'stocks:stock_info' %}" class="btn btn-primary btn-lg mr-2 mt-1
+                    animate__animated animate__zoomIn">Explore Stocks</a>
+                    <a href="{% url 'stocks:stock_history' %}" class="btn btn-secondary btn-lg mt-2
+                    animate__animated animate__zoomIn">View Historical Graphs</a>
                 </div>
             </div>
         </div>

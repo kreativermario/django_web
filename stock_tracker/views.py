@@ -18,9 +18,6 @@ def home_view(request):
 def stock_info(request):
     form = StockSearchForm()
     stock = None
-    stock_name = None
-    stock_symbol = None
-    price = None
     form_error = False
     error_message = None
     if request.method == 'POST':
@@ -32,18 +29,13 @@ def stock_info(request):
                 fetched_stock = yf.Ticker(stock_ticker)
                 stock_data = fetched_stock.info
 
-                for info in stock_data:
-                    print(info)
-
                 company = create_company(stock_data)
                 stock = create_stock(stock_data, company)
-
-
-
             except:
                 form_error = True
                 error_message = 'Ticker name not valid!'
-
+    print(form_error)
+    print(error_message)
     context = {
         'form': form,
         'form_error': form_error,
