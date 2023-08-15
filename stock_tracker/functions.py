@@ -1,9 +1,9 @@
-from forex_python.converter import CurrencyCodes
-
 from .models import Stock, Company
 
 # Custom libraries
 import yfinance as yf
+import plotly.graph_objs as go
+from forex_python.converter import CurrencyCodes
 
 
 def create_company(stock_data):
@@ -24,7 +24,6 @@ def create_company(stock_data):
 
 
 def create_stock(stock_data, company=None):
-
     # Stock info
     stock_name = stock_data.get('longName')
     stock_symbol = stock_data.get('symbol')
@@ -56,3 +55,54 @@ def create_stock(stock_data, company=None):
                   ask_price=ask_price,
                   open_price=open_price)
     return stock
+
+
+def create_line_graph(historic_data):
+    dates = [record['Date'].strftime('%Y-%m-%d') for record in historic_data]
+    prices = [record['Close'] for record in historic_data]
+
+    trace = go.Scatter(x=dates, y=prices,
+                       mode='lines+markers',
+                       name='Price',
+                       line=dict(color='green'))
+    layout = go.Layout(title='Historical Price Chart',
+                       xaxis=dict(title='Date'),
+                       yaxis=dict(title='Price'))
+
+    return trace, layout
+
+
+def create_area_graph(historic_data):
+    dates = [record['Date'].strftime('%Y-%m-%d') for record in historic_data]
+    prices = [record['Close'] for record in historic_data]
+
+    trace = go.Scatter(
+        x=dates,
+        y=prices,
+        mode='lines',
+        fill='tozeroy',
+        line=dict(color='green'),  # Set the line color
+        fillcolor='rgba(93, 187, 99, 1)'  # Set the fill color with transparency
+    )
+    layout = go.Layout(title='Historical Price Chart',
+                       xaxis=dict(title='Date'),
+                       yaxis=dict(title='Price'))
+
+    return trace, layout
+
+
+def create_candlestick_graph(historic_data):
+    trace = go.Candlestick(
+        x=[record['Date'] for record in historic_data],
+        open=[record['Open'] for record in historic_data],
+        high=[record['High'] for record in historic_data],
+        low=[record['Low'] for record in historic_data],
+        close=[record['Close'] for record in historic_data],
+        increasing_line_color='green',  # Customize colors if desired
+        decreasing_line_color='red'
+    )
+    layout = go.Layout(title='Stock Historical Price Chart',
+                       xaxis=dict(title='Date'),
+                       yaxis=dict(title='Price'))
+
+    return trace, layout

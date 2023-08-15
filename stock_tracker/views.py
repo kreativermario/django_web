@@ -4,7 +4,8 @@ from django.shortcuts import render
 # Local files
 from .models import Stock, Company
 from .forms import StockSearchForm
-from .functions import create_company, create_stock
+from .functions import create_company, create_stock, create_line_graph, \
+    create_area_graph, create_candlestick_graph
 
 # Custom libraries
 import yfinance as yf
@@ -57,48 +58,39 @@ def stock_history(request):
     graph_div = None
     ticker_form = None
     fetched_stock = None
+    stock_name = None
 
     if request.POST or request.GET:
         form = StockSearchForm(request.POST)
         graph_type = request.GET.get('graph_type',
                                      'line')  # Get the graph type from the query parameter, set default to line
         ticker_form = request.GET.get('stock_ticker')
-        timeline = request.GET.get('timeline', '1y')
+        timeline = request.GET.get('timeline', 'ytd')
 
         if form.is_valid():
             ticker_form = form.cleaned_data['stock_ticker']
 
         fetched_stock = yf.Ticker(ticker_form)
+        stock_name = fetched_stock.info.get('longName')
         history = fetched_stock.history(timeline)
         historic_data = history.reset_index().to_dict('records')  # Convert DataFrame to list of dictionaries
 
     if fetched_stock is not None:
 
         if graph_type == 'line':
-            dates = [record['Date'].strftime('%Y-%m-%d') for record in historic_data]
-            prices = [record['Close'] for record in historic_data]
+            trace, layout = create_line_graph(historic_data)
 
-            trace = go.Scatter(x=dates, y=prices, mode='lines+markers', name='Price')
-            layout = go.Layout(title='Historical Price Chart', xaxis=dict(title='Date'), yaxis=dict(title='Price'))
+        elif graph_type == 'area':
+            trace, layout = create_area_graph(historic_data)
 
         elif graph_type == 'candlestick':
-            trace = go.Candlestick(
-                x=[record['Date'] for record in historic_data],
-                open=[record['Open'] for record in historic_data],
-                high=[record['High'] for record in historic_data],
-                low=[record['Low'] for record in historic_data],
-                close=[record['Close'] for record in historic_data],
-                increasing_line_color='green',  # Customize colors if desired
-                decreasing_line_color='red'
-            )
-            layout = go.Layout(title='Historical Price Chart',
-                               xaxis=dict(title='Date'),
-                               yaxis=dict(title='Price'))
+            trace, layout = create_candlestick_graph(historic_data)
 
         graph_div = go.Figure(data=[trace], layout=layout).to_html(full_html=False)
 
     context = {
         'form': form,
+        'stock_name': stock_name,
         'stock_ticker': ticker_form,
         'graph_type': graph_type,
         'timeline': timeline,
