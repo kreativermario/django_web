@@ -19,6 +19,7 @@ def stock_info(request):
     form = StockSearchForm()
     stock = None
     form_error = False
+    fix_error_message = None
     error_message = None
     if request.method == 'POST':
         form = StockSearchForm(request.POST)
@@ -34,12 +35,12 @@ def stock_info(request):
             except:
                 form_error = True
                 error_message = 'Ticker name not valid!'
-    print(form_error)
-    print(error_message)
+                fix_error_message = 'Maybe try searching for a valid stock ticker?'
     context = {
         'form': form,
         'form_error': form_error,
         'error_message': error_message,
+        'fix_error_message': fix_error_message,
         'stock': stock,
     }
 
