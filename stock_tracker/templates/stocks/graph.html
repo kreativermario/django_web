@@ -4,7 +4,12 @@
 
 {% block content %}
     <div class="content mt-5 mx-5">
-        <h2 class="mx-5">Historical Price Chart</h2>
+        {% if stock_name %}
+            <h2 class="mx-5">{{ stock_name }}</h2>
+        {% else %}
+            <h2 class="mx-5">Historical Price Chart</h2>
+        {% endif %}
+
         <form class="my-2 mx-5" method="post" class="form-inline" id="stock-search-form">
             {% csrf_token %}
             <div class="input-group mx-3 my-3">
@@ -25,6 +30,8 @@
            class="btn btn-primary">Line Graph</a>
         <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type=candlestick"
            class="btn btn-primary">Candlestick Graph</a>
+    <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type=area"
+           class="btn btn-primary">Area Graph</a>
     </div>
 
     <div class="col-12 mt-4 mx-5">
@@ -44,19 +51,23 @@
 
     <!-- Button to switch date -->
     <div class="col-12 mt-2 mx-5">
-        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=1y"
-           class="btn btn-secondary">1y</a>
-        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=6mo"
-           class="btn btn-secondary">6mo</a>
-        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=3mo"
-           class="btn btn-secondary">3mo</a>
+
+        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=1d"
+           class="btn btn-secondary">1d</a>
+        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=5d"
+           class="btn btn-secondary">5d</a>
         <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=1mo"
            class="btn btn-secondary">1mo</a>
-        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=14d"
-           class="btn btn-secondary">14d</a>
-        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=7d"
-           class="btn btn-secondary">7d</a>
-        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=3d"
-           class="btn btn-secondary">3d</a>
+        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=6mo"
+           class="btn btn-secondary">6mo</a>
+        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=ytd"
+           class="btn btn-secondary">YTD</a>
+        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=1y"
+           class="btn btn-secondary">1y</a>
+        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=5y"
+           class="btn btn-secondary">5y</a>
+        <a href="{% url 'stocks:stock_history' %}?stock_ticker={{ stock_ticker }}&graph_type={{ graph_type }}&timeline=max"
+           class="btn btn-secondary">Max</a>
+
     </div>
 {% endblock %}
