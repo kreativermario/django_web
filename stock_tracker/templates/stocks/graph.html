@@ -71,3 +71,40 @@
 
     </div>
 {% endblock %}
+
+{% block alerts %}
+    {% if form_error %}
+        <div id="errorModal" class="modal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Error</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-warning" role="alert">
+                            <h4 class="alert-heading">Oops! An error occured!</h4>
+                            <p>{{ error_message }}</p>
+                            <hr>
+                            <p class="mb-0">{{ fix_error_message }}</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        // Modal handling
+        $(document).ready(function() {
+            {% if form_error %}
+                $("#errorModal").modal("show");
+            {% endif %}
+        });
+    </script>
+{% endblock %}

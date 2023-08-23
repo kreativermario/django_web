@@ -59,6 +59,9 @@ def stock_history(request):
     ticker_form = None
     fetched_stock = None
     stock_name = None
+    form_error = False
+    fix_error_message = None
+    error_message = None
 
     if request.POST or request.GET:
         form = StockSearchForm(request.POST)
@@ -67,13 +70,20 @@ def stock_history(request):
         ticker_form = request.GET.get('stock_ticker')
         timeline = request.GET.get('timeline', 'ytd')
 
-        if form.is_valid():
-            ticker_form = form.cleaned_data['stock_ticker']
+        try:
+            if form.is_valid():
+                ticker_form = form.cleaned_data['stock_ticker']
 
-        fetched_stock = yf.Ticker(ticker_form)
-        stock_name = fetched_stock.info.get('longName')
-        history = fetched_stock.history(timeline)
-        historic_data = history.reset_index().to_dict('records')  # Convert DataFrame to list of dictionaries
+            fetched_stock = yf.Ticker(ticker_form)
+            stock_name = fetched_stock.info.get('longName')
+            history = fetched_stock.history(timeline)
+            historic_data = history.reset_index().to_dict('records')  # Convert DataFrame to list of dictionaries
+        except:
+            form_error = True
+            error_message = 'Ticker name not valid!'
+            fix_error_message = 'Maybe try searching for a valid stock ticker? ' \
+                                'If you\'re trying to search for an ETF like VWCE, try VWCE.de. ' \
+                                'The de is the stock market. For example: IWDA.as (Euronext Amsterdam)'
 
     if fetched_stock is not None:
 
@@ -95,5 +105,8 @@ def stock_history(request):
         'graph_type': graph_type,
         'timeline': timeline,
         'plot_div': graph_div,
+        'form_error': form_error,
+        'error_message': error_message,
+        'fix_error_message': fix_error_message,
     }
     return render(request, 'stocks/graph.html', context)
